@@ -1,0 +1,69 @@
+{
+    _id: ObjectId('640df2a2295a15836984eefb'),
+    id: '161e5ee2-168e-45d0-99d2-e84d9daa59a3',
+    pagePath: '/',
+    components: [
+        {
+            col: {
+                lg: 12,
+                md: 12,
+                sm: 12,
+                xl: 12,
+                xs: 12
+            },
+            registerName: 'button',
+            props: {
+                title: 'Título',
+                variant: 'contained'
+            },
+            id: '7c76ef7f-160e-4650-81fa-82db75bd1e04'
+        },
+        {
+            col: {
+                xs: 12,
+                sm: 12,
+                md: 12,
+                lg: 6,
+                xl: 11
+            },
+            id: '839d092d-b2ab-4c21-bf71-3973b86d5244',
+            name: 'Botão',
+            props: {
+                title: 'Leonardo',
+                variant: 'contained'
+            },
+            registerName: 'button'
+        },
+        {
+            col: {
+                lg: 12,
+                md: 12,
+                sm: 12,
+                xl: 12,
+                xs: 12
+            },
+            registerName: 'button',
+            props: {
+                title: 'Título',
+                variant: 'contained'
+            },
+            id: 'a84d0971-8d8d-475a-b280-31995d89f033'
+        },
+        {
+            col: {
+                xs: 12,
+                sm: 12,
+                md: 12,
+                lg: 6,
+                xl: 12
+            },
+            id: '839d092d-b2ab-4c21-bf71-3973b86d5245',
+            name: 'Botão',
+            props: {
+                title: 'Root',
+                variant: 'outlined'
+            },
+            registerName: 'button'
+        }
+    ]
+}

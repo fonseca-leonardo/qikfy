@@ -16,9 +16,16 @@
     "incremental": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@builder/*": ["./src/builder/*"],
+      "@types/*": ["src/@types/*"],
+      "@server/*": ["src/app/server/*"],
+      "@components/*": ["src/app/client/presentation/components/*"],
+      "@hooks/*": ["src/app/client/presentation/hooks/*"],
+      "@providers/*": ["src/app/client/presentation/providers/*"],
+      "@contexts/*": ["src/app/client/presentation/contexts/*"],
+      "@styles/*": ["src/app/client/presentation/styles/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ],
   "exclude": ["node_modules"]
 }
