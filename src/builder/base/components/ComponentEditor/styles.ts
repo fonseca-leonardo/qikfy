@@ -1,21 +1,10 @@
-import { css } from "@emotion/react";
+import styled, { css } from "@emotion/react";
 
-export const componentName = css`
-  position: absolute;
-  bottom: -10px;
-  display: none;
-  left: 20px;
-  background-color: #2a84de;
+interface GridStyleProps {
+  isHover: boolean;
+}
 
-  color: white;
-  padding: 2px 16px;
-  border-radius: 4px;
-  font-size: 14px;
-
-  z-index: 99;
-`;
-
-export const gridStyles = css`
+export const gridStyles = ({ isHover }: GridStyleProps) => css`
   &:hover {
     margin: 4px 0px;
     padding: 2px;
@@ -28,7 +17,7 @@ export const gridStyles = css`
     }
   }
 
-  div {
+  .block-click {
     position: absolute;
     width: 100%;
     height: 100%;
@@ -36,4 +25,11 @@ export const gridStyles = css`
   }
 
   position: relative;
+
+  ${isHover &&
+  css`
+    margin: 4px 0px;
+    padding: 2px;
+    border: 4px solid orange;
+  `}
 `;

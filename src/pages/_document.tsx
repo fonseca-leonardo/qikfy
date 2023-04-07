@@ -10,7 +10,6 @@ import theme from "src/app/client/presentation/styles/theme";
 import { EmotionJSX } from "@emotion/react/types/jsx-namespace";
 import createEmotionCache from "src/app/server/createEmotionCache";
 import createEmotionServer from "@emotion/server/create-instance";
-import { resetServerContext } from "react-beautiful-dnd";
 
 interface MyDocumentProps extends DocumentProps {
   emotionStyleTags: EmotionJSX.Element[];
@@ -57,7 +56,6 @@ MyDocument.getInitialProps = async (ctx: DocumentContext) => {
       dangerouslySetInnerHTML={{ __html: style.css }}
     />
   ));
-  resetServerContext();
   return {
     ...initialProps,
     emotionStyleTags,

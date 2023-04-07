@@ -10,6 +10,7 @@ const TextField: React.FC<TextFieldProps> = ({
   name,
   label,
   required,
+  placeholder,
 }) => {
   return (
     <Controller
@@ -22,6 +23,7 @@ const TextField: React.FC<TextFieldProps> = ({
           name={name}
           fullWidth
           label={label}
+          placeholder={placeholder}
           margin="dense"
         />
       )}

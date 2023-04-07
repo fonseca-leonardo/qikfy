@@ -1,7 +1,7 @@
 import React from "react";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Typography, Toolbar, AppBar, IconButton, Button } from "@mui/material";
-import BuilderComponent from "../BuilderComponent";
+import BuilderComponent from "../../BuilderComponent";
 import { useEditor } from "@builder/hooks/useEditor";
 import { RemoveRedEye, VisibilityOff } from "@mui/icons-material";
 

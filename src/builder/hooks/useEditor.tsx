@@ -1,13 +1,5 @@
 /** @jsxImportSource @emotion/react */
 import React, { useCallback, useContext, useState } from "react";
-import {
-  DragDropContext,
-  Draggable,
-  Droppable,
-  DroppableProvided,
-  DropResult,
-  ResponderProvided,
-} from "react-beautiful-dnd";
 
 import editorApi from "@builder/api/editorApi";
 import {
@@ -16,12 +8,14 @@ import {
   EditorUpdateComponent,
   EditorContext,
   EditorContextProps,
+  EditorSwitchComponents,
 } from "@builder/context/EditorContext";
 import { BuilderComponentModel } from "src/@types/builder";
 import EditorLayout from "@builder/base/layout/EditorLayout";
 import { registerComponentsList, registerRecord } from "@components/register";
 import ComponentEditor from "@builder/base/components/ComponentEditor";
 import { Grid } from "@mui/material";
+import { arrayMoveElement } from "@builder/lib/arrayMoveElement";
 
 interface EditorProviderProps {
   pagePath: string;
@@ -32,6 +26,7 @@ export const EditorProvider: React.FC<EditorProviderProps> = ({
   pagePath,
   components,
 }) => {
+  const [currentHover, setCurrentHover] = useState<string>("");
   const [editorDisabledState, setEditorDisabledState] = useState(false);
   const [editorComponents, setEditorComponents] =
     useState<BuilderComponentModel[]>(components);
@@ -96,19 +91,30 @@ export const EditorProvider: React.FC<EditorProviderProps> = ({
     []
   );
 
-  const handleDragEnd = useCallback(
-    (result: DropResult, provided: ResponderProvided) => {
-      console.log({ result, provided });
+  const handleSwitchComponents = useCallback(
+    async ({ fromId, toId }: EditorSwitchComponents) => {
+      const fromIndex = editorComponents.findIndex((el) => el.id === fromId);
+      const toIndex = editorComponents.findIndex((el) => el.id === toId);
+      if (fromIndex === -1 || toIndex === -1) return;
+
+      const componentList = arrayMoveElement(
+        editorComponents,
+        fromIndex,
+        toIndex
+      );
+
+      const { data } = await editorApi.patch("/pages", {
+        pagePath,
+        components: componentList,
+      });
+
+      setEditorComponents(data.components);
     },
-    []
+    [editorComponents, pagePath]
   );
 
   const renderReactElement = useCallback(
-    (
-      builderComponent: BuilderComponentModel<any>,
-      index: number,
-      provided: DroppableProvided
-    ) => {
+    (builderComponent: BuilderComponentModel<any>, index: number) => {
       const { id, props, registerName, col } = builderComponent;
       const { component, name } = registerRecord()[registerName];
 
@@ -121,33 +127,18 @@ export const EditorProvider: React.FC<EditorProviderProps> = ({
       };
 
       return (
-        <Draggable
+        <ComponentEditor
           key={id}
-          draggableId={id}
+          config={config}
           index={index}
-          shouldRespectForcePress
-          disableInteractiveElementBlocking
+          changeCurrentHover={setCurrentHover}
+          currentHover={currentHover}
         >
-          {(provided, snapshot) => (
-            <>
-              <ComponentEditor
-                config={config}
-                index={index}
-                provided={provided}
-              >
-                {React.createElement(component, props)}
-              </ComponentEditor>
-              {snapshot.isDragging && (
-                <Grid {...config.col} className="dnd-copy">
-                  {React.createElement(component, props)}
-                </Grid>
-              )}
-            </>
-          )}
-        </Draggable>
+          {React.createElement(component, props)}
+        </ComponentEditor>
       );
     },
-    []
+    [currentHover]
   );
 
   return (
@@ -160,27 +151,14 @@ export const EditorProvider: React.FC<EditorProviderProps> = ({
         addComponent: handleAddComponent,
         removeComponent: handleRemoveComponent,
         updateComponent: handleUpdateComponent,
+        switchComponents: handleSwitchComponents,
         updateEditorComponents: setEditorComponents,
       }}
     >
       <EditorLayout>
-        <DragDropContext onDragEnd={handleDragEnd}>
-          <Droppable droppableId="components">
-            {(provided, snapshot) => (
-              <Grid
-                container
-                className="components"
-                {...provided.droppableProps}
-                ref={provided.innerRef}
-              >
-                {editorComponents.map((el, index) =>
-                  renderReactElement(el, index, provided)
-                )}
-                {provided.placeholder}
-              </Grid>
-            )}
-          </Droppable>
-        </DragDropContext>
+        <Grid container className="components">
+          {editorComponents.map((el, index) => renderReactElement(el, index))}
+        </Grid>
       </EditorLayout>
     </EditorContext.Provider>
   );

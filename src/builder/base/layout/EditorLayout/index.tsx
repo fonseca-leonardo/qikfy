@@ -4,7 +4,7 @@ import { useEditor } from "@builder/hooks/useEditor";
 import { Add } from "@mui/icons-material";
 import { Button, Grid } from "@mui/material";
 import React, { useCallback, useState } from "react";
-import Topbar from "../../components/Topbar";
+import Topbar from "./Topbar";
 import { Main } from "./styles";
 
 interface EditorLayoutProps {

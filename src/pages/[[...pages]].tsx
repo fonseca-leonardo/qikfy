@@ -1,27 +1,76 @@
 import Head from "next/head";
-import Image from "next/image";
-import { Inter } from "next/font/google";
-import {
-  DragDropContext,
-  Draggable,
-  Droppable,
-  DropResult,
-  ResponderProvided,
-} from "react-beautiful-dnd";
-import { useCallback } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useDrag, useDrop } from "react-dnd";
 
 const dragItems = Array.from({ length: 20 }).map((_, index) => ({
   id: `${index}-item`,
   content: "Item " + index,
 }));
 
-export default function Home() {
-  const handleDragEnd = useCallback(
-    (result: DropResult, provided: ResponderProvided) => {
-      console.log({ result, provided });
+interface DragCardProps {
+  id: string;
+  content: string;
+  currentHover: string;
+  changeCurrentHover: (id: string) => void;
+}
+
+const DragCard = ({
+  id,
+  content,
+  currentHover,
+  changeCurrentHover,
+}: DragCardProps) => {
+  const isHovering = currentHover === id;
+  const ref = useRef<HTMLDivElement>(null);
+
+  const [, dragRef] = useDrag({
+    type: "components",
+    item: { id, content },
+    collect: (monitor) => ({
+      isDragging: monitor.isDragging(),
+    }),
+    end(draggedItem, monitor) {
+      changeCurrentHover("");
     },
-    []
+  });
+
+  const [, dropRef] = useDrop<{ id: string }>({
+    accept: "components",
+    hover: (item, monitor) => {
+      if (id !== currentHover) {
+        changeCurrentHover(id);
+      }
+    },
+    drop: (item, monitor) => {
+      changeCurrentHover("");
+    },
+    collect: (monitor) => ({
+      isOver: monitor.isOver(),
+      dropId: id,
+    }),
+  });
+
+  useEffect(() => {
+    dragRef(dropRef(ref));
+  }, [dragRef, dropRef]);
+
+  return (
+    <div
+      ref={ref}
+      style={{
+        color: isHovering ? "red" : "black",
+        minHeight: 20,
+        border: "1px solid black",
+        width: 100,
+      }}
+    >
+      {content}
+    </div>
   );
+};
+
+export default function Home() {
+  const [currentHover, setCurrentHover] = useState<string>("");
   return (
     <>
       <Head>
@@ -32,28 +81,17 @@ export default function Home() {
       </Head>
       <main>
         <h1>AQUI</h1>
-        <DragDropContext onDragEnd={handleDragEnd}>
-          <Droppable droppableId="list">
-            {({ innerRef, droppableProps, placeholder }) => (
-              <ul className="list" {...droppableProps} ref={innerRef}>
-                {dragItems.map((el, index) => (
-                  <Draggable key={el.id} draggableId={el.id} index={index}>
-                    {({ innerRef, dragHandleProps, draggableProps }) => (
-                      <li
-                        ref={innerRef}
-                        {...draggableProps}
-                        {...dragHandleProps}
-                      >
-                        <div>{el.content}</div>
-                      </li>
-                    )}
-                  </Draggable>
-                ))}
-                {placeholder}
-              </ul>
-            )}
-          </Droppable>
-        </DragDropContext>
+        <div>
+          {dragItems.map((el) => (
+            <div key={el.id}>
+              <DragCard
+                {...el}
+                currentHover={currentHover}
+                changeCurrentHover={setCurrentHover}
+              />
+            </div>
+          ))}
+        </div>
       </main>
     </>
   );

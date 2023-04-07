@@ -1,12 +1,24 @@
 import React from "react";
-import { ScopedCssBaseline } from "@mui/material";
+import { createTheme, ScopedCssBaseline, ThemeProvider } from "@mui/material";
+import { brown, yellow } from "@mui/material/colors";
 
 export interface BuilderComponentProps {
   children: React.ReactNode;
 }
 
+const appBuilderTheme = createTheme({
+  palette: {
+    primary: brown,
+    secondary: yellow,
+  },
+});
+
 const BuilderComponent: React.FC<BuilderComponentProps> = ({ children }) => {
-  return <ScopedCssBaseline>{children}</ScopedCssBaseline>;
+  return (
+    <ScopedCssBaseline>
+      <ThemeProvider theme={appBuilderTheme}>{children}</ThemeProvider>
+    </ScopedCssBaseline>
+  );
 };
 
 export default BuilderComponent;

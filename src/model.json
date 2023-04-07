@@ -5,31 +5,48 @@
     components: [
         {
             col: {
-                lg: 12,
-                md: 12,
+                xs: 12,
                 sm: 12,
-                xl: 12,
-                xs: 12
+                md: 12,
+                lg: 6,
+                xl: 7
             },
-            registerName: 'button',
+            id: '839d092d-b2ab-4c21-bf71-3973b86d5244',
+            name: 'Botão',
             props: {
-                title: 'Título',
+                title: 'Leonardo',
                 variant: 'contained'
             },
-            id: '7c76ef7f-160e-4650-81fa-82db75bd1e04'
+            registerName: 'button'
         },
         {
             col: {
                 xs: 12,
                 sm: 12,
                 md: 12,
-                lg: 6,
-                xl: 11
+                lg: 12,
+                xl: 2
             },
-            id: '839d092d-b2ab-4c21-bf71-3973b86d5244',
+            id: '839d092d-b2ab-4c21-bf71-3973b86d5245',
             name: 'Botão',
             props: {
-                title: 'Leonardo',
+                title: 'Root',
+                variant: 'outlined'
+            },
+            registerName: 'button'
+        },
+        {
+            col: {
+                lg: 12,
+                md: 12,
+                sm: 12,
+                xl: 12,
+                xs: 12
+            },
+            id: 'a7fe33c7-e4d9-4966-8043-3751c0af1b29',
+            name: 'Botão',
+            props: {
+                title: 'Título',
                 variant: 'contained'
             },
             registerName: 'button'
@@ -42,25 +59,10 @@
                 xl: 12,
                 xs: 12
             },
-            registerName: 'button',
-            props: {
-                title: 'Título',
-                variant: 'contained'
-            },
-            id: 'a84d0971-8d8d-475a-b280-31995d89f033'
-        },
-        {
-            col: {
-                xs: 12,
-                sm: 12,
-                md: 12,
-                lg: 6,
-                xl: 12
-            },
-            id: '839d092d-b2ab-4c21-bf71-3973b86d5245',
+            id: '4a3753d7-72f3-4c11-b093-1f3252d47d3a',
             name: 'Botão',
             props: {
-                title: 'Root',
+                title: 'Título',
                 variant: 'outlined'
             },
             registerName: 'button'

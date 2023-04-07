@@ -11,6 +11,7 @@ export type BuilderInputProps = {
   label?: string;
   options?: BuilderInputOption[];
   required?: boolean;
+  placeholder?: string;
 };
 
 export type BuilderEditorComponent = {
@@ -56,6 +57,7 @@ export type BuilderComponentModel<T = any> = {
 
 export type BuilderPageModel = {
   id: string;
+  title: string;
   pagePath: string;
   components: BuilderComponentModel[];
 };

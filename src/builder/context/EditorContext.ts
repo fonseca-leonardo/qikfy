@@ -17,12 +17,18 @@ export type EditorUpdateComponent = {
   index: number;
 };
 
+export type EditorSwitchComponents = {
+  fromId: string;
+  toId: string;
+};
+
 export interface EditorContextProps {
   pagePath: string;
   editorDisabled: boolean;
   editorComponents: BuilderComponentModel<any>[];
   switchEditorMode: () => void;
   addComponent: (values: EditorAddComponent) => Promise<void>;
+  switchComponents: (values: EditorSwitchComponents) => Promise<void>;
   removeComponent: (values: EditorRemoveComponent) => Promise<void>;
   updateComponent: (values: EditorUpdateComponent) => Promise<void>;
   updateEditorComponents: (components: BuilderComponentModel[]) => void;

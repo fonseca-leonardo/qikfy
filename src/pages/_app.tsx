@@ -6,6 +6,8 @@ import theme from "src/app/client/presentation/styles/theme";
 import createEmotionCache from "src/app/server/createEmotionCache";
 
 import "./global.css";
+import { DndProvider } from "react-dnd";
+import { HTML5Backend } from "react-dnd-html5-backend";
 
 const clientSideEmotionCache = createEmotionCache();
 
@@ -24,8 +26,10 @@ export default function App({
         <meta name="viewport" content="initial-scale=1, width=device-width" />
       </Head>
       <ThemeProvider theme={theme}>
-        {/* <CssBaseline /> */}
-        <Component {...pageProps} />
+        <DndProvider backend={HTML5Backend}>
+          {/* <CssBaseline /> */}
+          <Component {...pageProps} />
+        </DndProvider>
       </ThemeProvider>
     </CacheProvider>
   );

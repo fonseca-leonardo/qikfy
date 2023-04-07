@@ -1,15 +1,16 @@
 /** @jsxImportSource @emotion/react */
 import { useEditor } from "@builder/hooks/useEditor";
 import { Grid, PopoverOrigin } from "@mui/material";
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { useDrag, useDrop } from "react-dnd";
+
 import { BuilderComponentColumns } from "src/@types/builder";
-import React, { useCallback, useState } from "react";
 import EditDialog from "./components/EditDialog";
 import PopoverMenu from "./components/PopoverMenu";
-import { componentName, gridStyles } from "./styles";
+import { gridStyles } from "./styles";
 import AddDialog from "./components/AddDialog";
 import { registerComponentsList } from "@components/register";
 import DeleteDialog from "./components/DeleteDialog";
-import { DraggableProvided } from "react-beautiful-dnd";
 
 interface ComponentEditorProps {
   config: {
@@ -21,22 +22,60 @@ interface ComponentEditorProps {
   };
   children?: React.ReactNode;
   index: number;
-  provided?: DraggableProvided;
+  currentHover: string;
+  changeCurrentHover: (id: string) => void;
 }
 
 const ComponentEditor: React.FC<ComponentEditorProps> = ({
   children,
   config,
   index,
-  provided,
+  changeCurrentHover,
+  currentHover,
 }) => {
+  const isHover = currentHover === config.id;
   const {
     pagePath,
     editorDisabled,
     addComponent,
     removeComponent,
     updateComponent,
+    switchComponents,
   } = useEditor();
+  const ref = useRef<HTMLDivElement>(null);
+
+  const [, dragRef] = useDrag({
+    type: "components",
+    item: { id: config.id },
+    end() {
+      changeCurrentHover("");
+    },
+  });
+  const [, dropRef] = useDrop<{ id: string }>({
+    accept: "components",
+    hover() {
+      if (config.id !== currentHover) {
+        changeCurrentHover(config.id);
+      }
+    },
+    async drop(item) {
+      const droppedElementId = config.id;
+      const dragElementId = item.id;
+      changeCurrentHover("");
+
+      if (droppedElementId === dragElementId) return;
+
+      await switchComponents({
+        fromId: dragElementId,
+        toId: droppedElementId,
+      });
+    },
+  });
+
+  useEffect(() => {
+    dragRef(dropRef(ref));
+  }, [dragRef, dropRef, editorDisabled]);
+
   const [editDialogState, setEditDialogState] = useState<boolean>(false);
   const [addDialogState, setAddDialogState] = useState<boolean>(false);
   const [deleteDialogState, setDeleteDialogState] = useState<boolean>(false);
@@ -112,21 +151,17 @@ const ComponentEditor: React.FC<ComponentEditorProps> = ({
   return !editorDisabled ? (
     <>
       <Grid
-        key={config.id}
+        css={gridStyles({ isHover })}
         item
-        css={gridStyles}
+        ref={ref}
+        key={config.id}
         onClick={(e) => setAnchorState(e.currentTarget)}
         {...config.col}
-        ref={provided?.innerRef}
-        {...provided?.draggableProps}
-        {...provided?.dragHandleProps}
       >
-        <div />
-        <span className="component-name" css={componentName}>
-          {config.name}
-        </span>
+        <div className="block-click" />
         {children}
       </Grid>
+
       <PopoverMenu
         open={open}
         anchorEl={anchorState}

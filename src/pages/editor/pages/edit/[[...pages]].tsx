@@ -6,6 +6,7 @@ import { BuilderPageModel } from "src/@types/builder";
 import { EditorProvider } from "@builder/hooks/useEditor";
 import PageService from "@builder/services/PageService";
 import clientPromise from "@builder/lib/dbconnect";
+import { EDIT_PAGES_BASE_ROUTE } from "@builder/constants/builder";
 
 interface EditorPageSSR {
   ssr: BuilderPageModel;
@@ -22,9 +23,9 @@ const EditorPage: NextPage<EditorPageProps> = ({ ssr }) => {
 export const getServerSideProps: GetServerSideProps<EditorPageSSR> = async (
   ctx
 ) => {
-  let pagePath = ctx.resolvedUrl.replace("/editor/pages", "");
+  let pagePath = ctx.resolvedUrl.replace(EDIT_PAGES_BASE_ROUTE, "");
 
-  if (ctx.resolvedUrl === "/editor/pages") {
+  if (ctx.resolvedUrl === EDIT_PAGES_BASE_ROUTE) {
     pagePath = "/";
   }
 
@@ -43,9 +44,7 @@ export const getServerSideProps: GetServerSideProps<EditorPageSSR> = async (
   return {
     props: {
       ssr: {
-        components: page.components,
-        id: page.id,
-        pagePath,
+        ...page,
       },
     },
   };
