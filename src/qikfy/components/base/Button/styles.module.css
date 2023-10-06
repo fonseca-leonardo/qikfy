@@ -1,0 +1,81 @@
+.button {
+    background: none;
+    border: none;
+    cursor: pointer;
+
+    font-size: 16px;
+    padding: 8px 16px;
+
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.button:hover {
+    filter: brightness(0.9);
+} 
+
+.contained-primary {
+    border-radius: 4px;
+    background-color: var(--qikfy-primary-color);
+    color: white;
+}
+
+
+.contained-secondary {
+    background: var(--qikfy-secondary-color);
+    color: white;
+}
+
+.contained-error {
+    background: var(--qikfy-error-color);
+    color: white;
+}
+
+.contained-success {
+    background: var(--qikfy-success-color);
+    color: white;
+}
+
+.outline-primary {
+    background: transparent;
+    color: var(--qikfy-primary-color);
+    border: 1px solid var(--qikfy-primary-color);
+}
+
+.outline-secondary {
+    background: transparent;
+    color: var(--qikfy-secondary-color);
+    border: 1px solid var(--qikfy-secondary-color);
+}
+
+.outline-success {
+    background: transparent;
+    color: var(--qikfy-success-color);
+    border: 1px solid var(--qikfy-success-color);
+}
+
+.outline-error {
+    background: transparent;
+    color: var(--qikfy-error-color);
+    border: 1px solid var(--qikfy-error-color);
+}
+
+.text-primary {
+    background: transparent;
+    color: var(--qikfy-primary-color);
+}
+
+.text-secondary {
+    background: transparent;
+    color: var(--qikfy-secondary-color);
+}
+
+.text-success {
+    background: transparent;
+    color: var(--qikfy-success-color);
+}
+
+.text-error {
+    background: transparent;
+    color: var(--qikfy-error-color);
+}

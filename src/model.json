@@ -1,71 +1,60 @@
 {
-    _id: ObjectId('640df2a2295a15836984eefb'),
-    id: '161e5ee2-168e-45d0-99d2-e84d9daa59a3',
-    pagePath: '/',
-    components: [
-        {
-            col: {
-                xs: 12,
-                sm: 12,
-                md: 12,
-                lg: 6,
-                xl: 7
-            },
-            id: '839d092d-b2ab-4c21-bf71-3973b86d5244',
-            name: 'Botão',
-            props: {
-                title: 'Leonardo',
-                variant: 'contained'
-            },
-            registerName: 'button'
+  "data": {
+    "pageName": "/home",
+    "components": [
+      {
+        "id": "123",
+        "registerName": "form",
+        "props": {},
+        "col": {
+          "xs": 12,
+          "sm": 12,
+          "md": 12,
+          "lg": 12,
+          "xl": 12
         },
-        {
-            col: {
-                xs: 12,
-                sm: 12,
-                md: 12,
-                lg: 12,
-                xl: 2
+        "children": [
+          {
+            "id": "312",
+            "registerName": "textInput",
+            "props": {},
+            "col": {
+              "xs": 12,
+              "sm": 12,
+              "md": 12,
+              "lg": 12,
+              "xl": 12
             },
-            id: '839d092d-b2ab-4c21-bf71-3973b86d5245',
-            name: 'Botão',
-            props: {
-                title: 'Root',
-                variant: 'outlined'
+            "children": []
+          },
+          {
+            "id": "222",
+            "registerName": "button",
+            "props": {},
+            "col": {
+              "xs": 12,
+              "sm": 12,
+              "md": 12,
+              "lg": 12,
+              "xl": 12
             },
-            registerName: 'button'
+            "children": []
+          }
+        ]
+      },
+      {
+        "id": "12333",
+        "registerName": "button",
+        "props": {},
+        "col": {
+          "xs": 12,
+          "sm": 12,
+          "md": 12,
+          "lg": 12,
+          "xl": 12
         },
-        {
-            col: {
-                lg: 12,
-                md: 12,
-                sm: 12,
-                xl: 12,
-                xs: 12
-            },
-            id: 'a7fe33c7-e4d9-4966-8043-3751c0af1b29',
-            name: 'Botão',
-            props: {
-                title: 'Título',
-                variant: 'contained'
-            },
-            registerName: 'button'
-        },
-        {
-            col: {
-                lg: 12,
-                md: 12,
-                sm: 12,
-                xl: 12,
-                xs: 12
-            },
-            id: '4a3753d7-72f3-4c11-b093-1f3252d47d3a',
-            name: 'Botão',
-            props: {
-                title: 'Título',
-                variant: 'outlined'
-            },
-            registerName: 'button'
-        }
+        "children": []
+      }
     ]
+  }
 }

@@ -1,0 +1,34 @@
+.button {
+    background: none;
+    border: none;
+    cursor: pointer;
+
+    font-size: 16px;
+
+    transition: all 0.3s ease;
+}
+
+.button:hover {
+    filter: brightness(0.9);
+}
+
+.default {
+    color: var(--qikfy-default-color);
+}
+
+.primary {
+    border-radius: 4px;
+    color: var(--qikfy-primary-color);
+}
+
+.secondary {
+    color: var(--qikfy-secondary-color);
+}
+
+.error {
+    color: var(--qikfy-error-color);
+}
+
+.success {
+    color: var(--qikfy-success-color);
+}
