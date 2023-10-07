@@ -32,7 +32,15 @@ function ComponentEditor({
 }: ComponentEditorProps) {
   const [popoverState, setpopoverState] = useState(false);
   const clickMeButtonRef = useRef<HTMLDivElement | null>(null);
-  const { onSelectComponent, pageModel, selectedComponent } = useRenderEditor();
+  const {
+    onSelectComponent,
+    pageModel,
+    selectedComponent,
+    addSelectedComponent,
+    deleteComponent,
+    onAddSelectedComponent,
+    onDeleteSelectedComponent,
+  } = useRenderEditor();
 
   const handleChildClick = (e: MouseEvent) => {
     e.stopPropagation();
@@ -49,8 +57,29 @@ function ComponentEditor({
     setpopoverState(false);
   };
 
+  const handleOpenAdd = () => {
+    const component = accessNested(pageModel?.components, componentKeyPath);
+
+    onAddSelectedComponent({ ...component, componentPath: componentKeyPath });
+    setpopoverState(false);
+  };
+
+  const handleDelete = () => {
+    const component = accessNested(pageModel?.components, componentKeyPath);
+
+    onDeleteSelectedComponent({
+      ...component,
+      componentPath: componentKeyPath,
+    });
+
+    setpopoverState(false);
+  };
+
   const editorClassName =
-    (currentHover === componentKeyPath || popoverState) && !selectedComponent
+    (currentHover === componentKeyPath || popoverState) &&
+    !selectedComponent &&
+    !addSelectedComponent &&
+    !deleteComponent
       ? `qik-element-editor ${className}`
       : className;
 
@@ -72,7 +101,12 @@ function ComponentEditor({
     <Popover
       isOpen={popoverState}
       content={
-        <PopoverOptions ref={clickMeButtonRef} onOpenEdit={handleOpenEdit} />
+        <PopoverOptions
+          ref={clickMeButtonRef}
+          onOpenEdit={handleOpenEdit}
+          onOpenAdd={handleOpenAdd}
+          onDelete={handleDelete}
+        />
       }
       onClickOutside={() => setpopoverState(false)}
       positions={["bottom", "right"]}

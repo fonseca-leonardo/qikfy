@@ -3,7 +3,7 @@ import styles from "./styles.module.css";
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: "text" | "outline" | "contained";
-  color?: "success" | "error" | "primary" | "secondary";
+  color?: "success" | "error" | "primary" | "secondary" | "inherit";
 }
 
 function Button({

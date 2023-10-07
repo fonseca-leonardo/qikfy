@@ -1,3 +1,5 @@
+export type QikfyEditorMode = "editor" | "preview";
+
 export type QikfyPropsValueType = "text" | "select";
 
 export type QikfyPropsEditor = {
@@ -48,5 +50,6 @@ export type QikfyComponentModel<T = any> = {
 export type QikfyComponentModelRecord = Record<string, QikfyComponentModel>;
 
 export type QikfyPageModel = {
+  pagePath: string;
   components: QikfyComponentModelRecord;
 };

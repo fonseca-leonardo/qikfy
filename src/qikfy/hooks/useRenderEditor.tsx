@@ -5,6 +5,7 @@ import {
   QikfyComponentColumns,
   QikfyComponentModel,
   QikfyComponentModelRecord,
+  QikfyEditorMode,
   QikfyPageModel,
   QikfySelectedComponent,
 } from "@/@types/builder";
@@ -12,9 +13,13 @@ import { registerComponents } from "@/presentation/components";
 import React, { createContext, useCallback, useContext, useState } from "react";
 import ComponentEditor from "../components/ComponentEditor";
 import updateNested from "../utils/updateNested";
+import _ from "lodash";
+import { updatePage } from "../frontend/services/pages";
 
 interface RenderEditorContextData {
   pageModel?: QikfyPageModel;
+  editorMode: QikfyEditorMode;
+  setEditorMode: (mode: QikfyEditorMode) => void;
   renderPageModel: () => React.DetailedReactHTMLElement<
     {
       id: string;
@@ -22,8 +27,16 @@ interface RenderEditorContextData {
     HTMLElement
   >;
   selectedComponent: QikfySelectedComponent | null;
+  addSelectedComponent: QikfySelectedComponent | null;
+  deleteComponent: QikfySelectedComponent | null;
+  onConfirmDeleteComponent: (selectedComponent: QikfySelectedComponent) => void;
   onSelectComponent: (component: QikfySelectedComponent | null) => void;
-
+  onAddComponent: (
+    selectedComponent: Record<string, QikfyComponentModel>,
+    pathToInsert: string
+  ) => void;
+  onAddSelectedComponent: (component: QikfySelectedComponent | null) => void;
+  onDeleteSelectedComponent: (component: QikfySelectedComponent | null) => void;
   onComponentEdition: (selectedComponent: QikfySelectedComponent) => void;
 }
 
@@ -34,11 +47,18 @@ const RenderEditorContext = createContext<RenderEditorContextData>(
 export const RenderEditorProvider: React.FC<{
   children: React.ReactNode;
   page: QikfyPageModel;
-}> = ({ children, page }) => {
+  editorModeDefault: QikfyEditorMode;
+}> = ({ children, editorModeDefault, page }) => {
   const [hoverElement, setHoverElement] = useState("");
   const [pageModelState, setPageModelState] = useState<QikfyPageModel>(page);
   const [selectedComponent, setSelectedComponent] =
     useState<QikfySelectedComponent | null>(null);
+  const [addSelectedComponent, setAddSelectedComponent] =
+    useState<QikfySelectedComponent | null>(null);
+  const [deleteComponent, setDeleteComponent] =
+    useState<QikfySelectedComponent | null>(null);
+  const [editorMode, setEditorMode] =
+    useState<QikfyEditorMode>(editorModeDefault);
 
   const parseColumnsToClassName = useCallback(
     (columns: QikfyComponentColumns) => {
@@ -79,6 +99,17 @@ export const RenderEditorProvider: React.FC<{
         component.col
       )}`;
 
+      if (editorMode !== "editor")
+        return React.createElement(
+          reactElement.element,
+          {
+            key: component.id,
+            className,
+            ...component.props,
+          },
+          children
+        );
+
       return (
         <ComponentEditor
           currentHover={hoverElement}
@@ -99,7 +130,7 @@ export const RenderEditorProvider: React.FC<{
         </ComponentEditor>
       );
     },
-    [parseColumnsToClassName, hoverElement]
+    [parseColumnsToClassName, hoverElement, editorMode]
   );
 
   const prepareRender = useCallback(
@@ -107,11 +138,7 @@ export const RenderEditorProvider: React.FC<{
       const rootElements: React.ReactElement[] = [];
 
       for (const key in components) {
-        const rootElement = React.createElement(
-          "div",
-          { key: key, className: "qik-element qik-col-12" },
-          renderElements(components[key], key)
-        );
+        const rootElement = renderElements(components[key], key);
 
         rootElements.push(rootElement);
       }
@@ -120,6 +147,7 @@ export const RenderEditorProvider: React.FC<{
         "div",
         {
           id: "root",
+          className: "qik-container",
         },
         rootElements
       );
@@ -141,8 +169,7 @@ export const RenderEditorProvider: React.FC<{
   );
 
   const handleComponentEdition = useCallback(
-    (selectedComponent: QikfySelectedComponent) => {
-      // console.log(selectedComponent);
+    async (selectedComponent: QikfySelectedComponent) => {
       const { componentPath, ...rest } = selectedComponent;
 
       const newComponentsPage = updateNested(
@@ -151,11 +178,64 @@ export const RenderEditorProvider: React.FC<{
         rest
       );
 
-      console.log(newComponentsPage);
-
       setPageModelState((prev) => ({ ...prev, components: newComponentsPage }));
 
       setSelectedComponent(null);
+
+      await updatePage({ ...pageModelState, components: newComponentsPage });
+    },
+    [pageModelState]
+  );
+
+  const handleAddComponent = useCallback(
+    async (
+      selectedComponent: Record<string, QikfyComponentModel>,
+      pathToInsert: string
+    ) => {
+      let clonePageComponents = _.cloneDeep(pageModelState.components);
+
+      if (!pathToInsert) {
+        setPageModelState((prev) => ({
+          ...prev,
+          components: selectedComponent,
+        }));
+      } else {
+        const newComponents = _.set(
+          clonePageComponents,
+          `${pathToInsert}`,
+          selectedComponent
+        );
+
+        const page: QikfyPageModel = {
+          ...pageModelState,
+          components: newComponents,
+        };
+
+        setPageModelState((prev) => ({
+          ...prev,
+          components: newComponents,
+        }));
+
+        await updatePage(page);
+      }
+
+      setAddSelectedComponent(null);
+    },
+    [pageModelState]
+  );
+
+  const handleConfirmDeleteComponent = useCallback(
+    async (selectedComponent: QikfySelectedComponent) => {
+      const { componentPath, ...rest } = selectedComponent;
+      const page = _.cloneDeep(pageModelState);
+
+      _.unset(page, `components.${componentPath}`);
+
+      setPageModelState(page);
+
+      setDeleteComponent(null);
+
+      await updatePage(page);
     },
     [pageModelState]
   );
@@ -167,7 +247,15 @@ export const RenderEditorProvider: React.FC<{
         renderPageModel,
         selectedComponent,
         onSelectComponent: handleSelectComponent,
+        onAddComponent: handleAddComponent,
+        addSelectedComponent,
+        onAddSelectedComponent: setAddSelectedComponent,
         onComponentEdition: handleComponentEdition,
+        onDeleteSelectedComponent: setDeleteComponent,
+        onConfirmDeleteComponent: handleConfirmDeleteComponent,
+        editorMode,
+        setEditorMode,
+        deleteComponent,
       }}
     >
       {children}

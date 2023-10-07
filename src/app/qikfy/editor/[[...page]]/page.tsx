@@ -1,27 +1,15 @@
-"use client";
-
 import React from "react";
-import { Typography } from "@mui/material";
 
-import useRenderEditor from "@/qikfy/hooks/useRenderEditor";
-import ComponentEditorDialog from "@/qikfy/components/ComponentEditorDialog";
+import EditorPage from "@/qikfy/pages/EditorPage";
 
 interface EditorPageProps {
   params: {
-    page: string;
+    page?: string[];
   };
 }
 
-function EditorPage({ params }: EditorPageProps) {
-  const { renderPageModel, onSelectComponent } = useRenderEditor();
-
-  return (
-    <>
-      <Typography>EditorPage: {params.page}</Typography>
-      {renderPageModel()}
-      <ComponentEditorDialog handleClose={() => onSelectComponent(null)} />
-    </>
-  );
+async function Editor({ params }: EditorPageProps) {
+  return <EditorPage />;
 }
 
-export default EditorPage;
+export default Editor;

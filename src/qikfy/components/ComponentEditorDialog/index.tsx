@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from "react";
+import React, { useCallback } from "react";
 import { FieldValues, RegisterOptions, useForm } from "react-hook-form";
 import useRenderEditor from "@/qikfy/hooks/useRenderEditor";
 import { registerComponentList } from "@/presentation/components";
@@ -7,8 +7,8 @@ import Dialog from "../base/Dialog";
 import styles from "./styles.module.css";
 import TextInput from "../base/TextInput";
 import Button from "../base/Button";
-import accessNested from "@/qikfy/utils/accessNested";
 import { QikfySelectedComponent } from "@/@types/builder";
+import Typography from "../base/Typography";
 
 interface ComponentEditorDialogProps {
   handleClose: () => void;
@@ -32,10 +32,11 @@ function ComponentEditorDialog({ handleClose }: ComponentEditorDialogProps) {
         obj[propName] = selectedComponent?.props[propName];
       }
     });
-    return obj;
+
+    return { props: obj, col: selectedComponent?.col };
   };
 
-  const { register, handleSubmit, formState } = useForm({
+  const { register, handleSubmit, formState } = useForm<any>({
     values: values(),
   });
 
@@ -47,6 +48,8 @@ function ComponentEditorDialog({ handleClose }: ComponentEditorDialogProps) {
     if (!component) return null;
 
     const { editor } = component;
+
+    const propPath = `props.${propName}`;
 
     const options: RegisterOptions<FieldValues, string> = {
       ...(editor[propName].required && {
@@ -63,19 +66,20 @@ function ComponentEditorDialog({ handleClose }: ComponentEditorDialogProps) {
         key={propName}
         required={editor[propName].required}
         label={editor[propName].name}
-        error={formState.errors[propName]?.message as string}
-        {...register(propName, options)}
+        error={formState.errors[propPath]?.message as string}
+        {...register(propPath, options)}
       />
     );
   };
 
   const submitForm = useCallback(
-    (data: any) => {
+    ({ props, col }: any) => {
       if (!selectedComponent) return;
 
       const pageComponents: QikfySelectedComponent = {
         ...selectedComponent,
-        props: data,
+        props,
+        col,
       };
 
       onComponentEdition(pageComponents);
@@ -94,6 +98,57 @@ function ComponentEditorDialog({ handleClose }: ComponentEditorDialogProps) {
         onSubmit={handleSubmit(submitForm)}
       >
         {propsInputs.map((el, index) => renderInput(el, index))}
+        <Typography type="h4">Tamanho</Typography>
+        <TextInput
+          required
+          type="number"
+          label="Tamanho XS"
+          {...register("col.xs", {
+            required: { message: "Campo obrigatório", value: true },
+          })}
+          error={formState.errors["col.xs"]?.message as string}
+          max={12}
+        />
+        <TextInput
+          required
+          type="number"
+          label="Tamanho SM"
+          {...register("col.sm", {
+            required: { message: "Campo obrigatório", value: true },
+          })}
+          error={formState.errors["col.sm"]?.message as string}
+          max={12}
+        />
+        <TextInput
+          required
+          type="number"
+          label="Tamanho MD"
+          {...register("col.md", {
+            required: { message: "Campo obrigatório", value: true },
+          })}
+          error={formState.errors["col.md"]?.message as string}
+          max={12}
+        />
+        <TextInput
+          required
+          type="number"
+          label="Tamanho LG"
+          error={formState.errors["col.lg"]?.message as string}
+          {...register("col.lg", {
+            required: { message: "Campo obrigatório", value: true },
+          })}
+          max={12}
+        />
+        <TextInput
+          required
+          type="number"
+          label="Tamanho XL"
+          error={formState.errors["col.xl"]?.message as string}
+          {...register("col.xl", {
+            required: { message: "Campo obrigatório", value: true },
+          })}
+          max={12}
+        />
         <div className={styles.modalButtons}>
           <Button variant="text" color="error" onClick={handleClose}>
             Fechar

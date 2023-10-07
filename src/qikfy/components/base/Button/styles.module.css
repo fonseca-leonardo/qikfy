@@ -8,6 +8,10 @@
 
     border-radius: 4px;
     transition: all 0.3s ease;
+
+    display: flex;
+    align-items: center;
+    gap: 4px;
 }
 
 .button:hover {
@@ -34,6 +38,11 @@
 .contained-success {
     background: var(--qikfy-success-color);
     color: white;
+}
+
+.contained-inherit {
+    background: var(--qikfy-success-color);
+    color: inherit;
 }
 
 .outline-primary {
@@ -78,4 +87,9 @@
 .text-error {
     background: transparent;
     color: var(--qikfy-error-color);
+}
+
+.text-inherit {
+    background: transparent;
+    color: inherit;
 }

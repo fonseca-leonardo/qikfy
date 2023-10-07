@@ -1,0 +1,19 @@
+.header {
+    position: fixed;
+    top: 0;
+    background-color: var(--qikfy-primary-color);
+    height: 44px;
+    padding: 8px 16px;
+    width: calc(100% - 32px);
+
+    box-shadow: var(--qikfy-shadow);
+
+    display: flex;
+    gap: 24px;
+    align-items: center;
+    color: white;
+}
+
+.toolbar {
+    flex: 1
+}
