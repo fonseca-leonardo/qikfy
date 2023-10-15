@@ -2,6 +2,13 @@ export type QikfyEditorMode = "editor" | "preview";
 
 export type QikfyPropsValueType = "text" | "select";
 
+export type QikfyColorsType =
+  | "success"
+  | "error"
+  | "primary"
+  | "secondary"
+  | "inherit";
+
 export type QikfyPropsEditor = {
   name: string;
   defaultValue?: string;
@@ -16,6 +23,7 @@ export type QikfyComponentExporter = {
   element: React.ForwardRefExoticComponent;
   registerName: string;
   editor: Record<string, QikfyPropsEditor>;
+  hasChildren: boolean;
 };
 
 export type QikfyColumnValues =
@@ -49,7 +57,31 @@ export type QikfyComponentModel<T = any> = {
 
 export type QikfyComponentModelRecord = Record<string, QikfyComponentModel>;
 
+export type QikfyPageRouter = {
+  router: string;
+  pageName: string;
+};
+
+export type QikfySearchQuery<T> = T & {
+  skip: number;
+  take: number;
+};
+
+export type QikfySearchResult<T> = {
+  list: T[];
+  count: number;
+};
+
 export type QikfyPageModel = {
   pagePath: string;
   components: QikfyComponentModelRecord;
+  name: string;
+};
+
+export type MongoQikfyPageModel = QikfyPageModel & { _id: string };
+
+export type ApiResponse<T> = {
+  data: T;
+  success?: boolean;
+  message?: string;
 };

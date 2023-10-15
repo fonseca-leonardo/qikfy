@@ -1,0 +1,64 @@
+.container {
+    border: 1px solid lightgrey;
+    display: flex;
+    gap: 16px;
+    flex-direction: column;
+
+    border-radius: 8px;
+    padding: 16px 16px;
+
+    box-shadow: var(--qikfy-shadow);
+    transition: border 0.2s;
+    width: 100%;
+
+    position: relative;
+}
+
+.deleteButton {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    opacity: 0;
+    transition: all 0.2s;
+}
+
+.container:hover {
+    border-color: var(--qikfy-primary-color);
+}
+
+.container:hover .deleteButton {
+    opacity: 1;
+
+}
+
+/* @media(max-width: 599px) {
+    .container {
+        max-width: 100%;
+    }
+} */
+
+@media (min-width: 900px) {
+    .container {
+        width: calc(100% / 2 - 56px);
+    }
+}
+
+@media(min-width: 1200px) {
+    .container {
+        width: calc(100% / 3 - 56px);
+    }
+}
+
+@media (min-width: 1536px) {
+    .container {
+       width: calc(100% / 4 - 58px);
+    }
+}
+
+
+
+.titleContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 4px
+}

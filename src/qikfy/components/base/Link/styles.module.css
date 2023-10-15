@@ -1,0 +1,35 @@
+.link {
+    text-align: center;
+    text-decoration: none;
+
+    transition: filter 0.2s;
+}
+
+.link:hover {
+    filter: brightness(0.6);
+}
+
+.link-primary {
+    background: transparent;
+    color: var(--qikfy-primary-color);
+}
+
+.link-secondary {
+    background: transparent;
+    color: var(--qikfy-secondary-color);
+}
+
+.link-success {
+    background: transparent;
+    color: var(--qikfy-success-color);
+}
+
+.link-error {
+    background: transparent;
+    color: var(--qikfy-error-color);
+}
+
+.link-inherit {
+    background: transparent;
+    color: inherit;
+}

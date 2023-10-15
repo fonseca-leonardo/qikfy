@@ -17,6 +17,8 @@ function ComponentDeleteDialog({ handleClose }: ComponentDeleteDialog) {
     onConfirmDeleteComponent(deleteComponent);
   }, [deleteComponent, onConfirmDeleteComponent]);
 
+  if (!deleteComponent) return null;
+
   return (
     <Dialog
       title={`Apagar - ${deleteComponent?.registerName}`}

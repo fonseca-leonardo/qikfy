@@ -1,0 +1,26 @@
+.addChildrenContainer {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+.addBox {
+    padding: 8px 16px;
+    margin-bottom: 4px;
+    border: 1px solid var(--qikfy-primary-color);
+    width: 50%;
+    text-align: center;
+    color: var(--qikfy-primary-color);
+    cursor: pointer;
+    font-size: 12px;
+    transition: all 0.2s;
+}
+
+.addBox:hover {
+    border: 1px solid var(--qikfy-primary-color);
+    font-size: 14px;
+
+    filter: brightness(0.9);
+    font-weight: bold;
+}

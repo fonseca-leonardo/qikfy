@@ -17,11 +17,7 @@ interface ComponentAddDialogProps {
 
 function ComponentAddDialog({ handleClose }: ComponentAddDialogProps) {
   const { addSelectedComponent, onAddComponent, pageModel } = useRenderEditor();
-  const { register, handleSubmit, reset, formState } = useForm({
-    resetOptions: {
-      keepValues: false,
-    },
-  });
+  const { register, handleSubmit, reset, formState } = useForm();
   const componentPicker = registerComponentList.map((el) => ({
     value: el.registerName,
     name: el.registerName,
@@ -99,14 +95,15 @@ function ComponentAddDialog({ handleClose }: ComponentAddDialogProps) {
           };
         }
       });
+      onAddComponent(obj, prev);
 
       reset();
-      onAddComponent(obj, prev);
+      setRegisterName("");
     },
     [
       addSelectedComponent?.componentPath,
       onAddComponent,
-      pageModel?.components,
+      pageModel,
       registerName,
       reset,
     ]
@@ -118,9 +115,11 @@ function ComponentAddDialog({ handleClose }: ComponentAddDialogProps) {
     handleClose?.();
   }, [handleClose, reset]);
 
+  if (!addSelectedComponent) return null;
+
   return (
     <Dialog
-      title={`Adicionar componente - ${addSelectedComponent?.registerName}`}
+      title={`Adicionar componente`}
       isOpen={!!addSelectedComponent}
       handleClose={handleDiagloClose}
     >
@@ -132,6 +131,7 @@ function ComponentAddDialog({ handleClose }: ComponentAddDialogProps) {
           setRegisterName(e.target.value);
           reset();
         }}
+        style={{ marginBottom: 16 }}
       />
       <form
         className={styles.componentEditorForm}

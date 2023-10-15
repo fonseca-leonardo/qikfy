@@ -14,6 +14,7 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
 export const textInputExporter: QikfyComponentExporter = {
   element: TextInput,
   registerName: "textInput",
+  hasChildren: false,
   editor: {
     name: {
       name: "Nome do input",

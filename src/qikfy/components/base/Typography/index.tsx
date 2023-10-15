@@ -1,5 +1,4 @@
 import React, { ReactHTML } from "react";
-
 interface TypographyProps extends React.HTMLAttributes<HTMLElement> {
   type?: keyof ReactHTML;
 }

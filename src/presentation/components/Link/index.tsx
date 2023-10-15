@@ -19,6 +19,7 @@ const Link = forwardRef<HTMLAnchorElement, LinkProps>(function Link(
 export const linkExporter: QikfyComponentExporter = {
   element: Link,
   registerName: "link",
+  hasChildren: false,
   editor: {
     title: {
       name: "Texto do link",

@@ -1,3 +1,9 @@
 .main {
     margin-top: 60px;
 }
+
+
+.drawerOpen {
+    margin-left: var(--qikfy-drawer-width);
+    width: calc(100% - var(--qikfy-drawer-width));
+}

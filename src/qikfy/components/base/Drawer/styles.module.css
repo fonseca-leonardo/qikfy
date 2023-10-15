@@ -1,0 +1,35 @@
+.drawerContainer {
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    border-right: 1px solid lightgrey;
+    width: var(--qikfy-drawer-width);
+    height: 100%;
+
+    transition: all 0.2s;
+
+    display: flex;
+    flex-direction: column;
+
+    box-shadow: var(--qikfy-shadow);
+}
+
+.drawerClose {
+    width: 0px;
+    opacity: 0;
+}
+
+.drawerContent {
+    margin-top: var(--qikfy-head-height);
+    border-top: 1px solid lightgrey;
+    border-bottom: 1px solid lightgrey;
+    display: flex;
+    padding: 8px 16px;
+    flex: 1;
+}
+
+.backButton {
+    width: 100%;
+    margin-bottom: 16px;
+    margin-top: 16px;
+}

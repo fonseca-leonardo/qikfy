@@ -2,7 +2,7 @@
     background: none;
     border: none;
     cursor: pointer;
-
+    text-decoration: none;
     font-size: 16px;
     padding: 8px 16px;
 
@@ -12,10 +12,20 @@
     display: flex;
     align-items: center;
     gap: 4px;
+    
+    justify-content: center;
+
+    min-width: fit-content;
+
+    height: 40px;
+}
+
+.buttonLink {
+    height: 24px;
 }
 
 .button:hover {
-    filter: brightness(0.9);
+    filter: brightness(0.85);
 } 
 
 .contained-primary {

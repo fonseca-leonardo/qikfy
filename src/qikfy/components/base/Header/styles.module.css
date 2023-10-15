@@ -2,8 +2,8 @@
     position: fixed;
     top: 0;
     background-color: var(--qikfy-primary-color);
-    height: 44px;
-    padding: 8px 16px;
+    height: var(--qikfy-head-height);
+    padding: 0px 16px;
     width: calc(100% - 32px);
 
     box-shadow: var(--qikfy-shadow);
@@ -12,6 +12,13 @@
     gap: 24px;
     align-items: center;
     color: white;
+
+    transition: all 0.2s;
+}
+
+.drawerOpen {
+    margin-left: var(--qikfy-drawer-width);
+    width: calc(100% - var(--qikfy-drawer-width) - 32px);
 }
 
 .toolbar {

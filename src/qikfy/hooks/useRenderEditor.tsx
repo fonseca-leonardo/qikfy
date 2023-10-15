@@ -15,6 +15,7 @@ import ComponentEditor from "../components/ComponentEditor";
 import updateNested from "../utils/updateNested";
 import _ from "lodash";
 import { updatePage } from "../frontend/services/pages";
+import ChildrenContainer from "../components/base/ChildrenContainer";
 
 interface RenderEditorContextData {
   pageModel?: QikfyPageModel;
@@ -28,6 +29,9 @@ interface RenderEditorContextData {
   >;
   selectedComponent: QikfySelectedComponent | null;
   addSelectedComponent: QikfySelectedComponent | null;
+  addSelectedComponentChildren: {
+    componentPath: string;
+  } | null;
   deleteComponent: QikfySelectedComponent | null;
   onConfirmDeleteComponent: (selectedComponent: QikfySelectedComponent) => void;
   onSelectComponent: (component: QikfySelectedComponent | null) => void;
@@ -36,8 +40,14 @@ interface RenderEditorContextData {
     pathToInsert: string
   ) => void;
   onAddSelectedComponent: (component: QikfySelectedComponent | null) => void;
+  onAddSelectedComponentChildren: (
+    component: {
+      componentPath: string;
+    } | null
+  ) => void;
   onDeleteSelectedComponent: (component: QikfySelectedComponent | null) => void;
   onComponentEdition: (selectedComponent: QikfySelectedComponent) => void;
+  onAddComponentChildren: (selectedComponent: QikfySelectedComponent) => void;
 }
 
 const RenderEditorContext = createContext<RenderEditorContextData>(
@@ -57,6 +67,10 @@ export const RenderEditorProvider: React.FC<{
     useState<QikfySelectedComponent | null>(null);
   const [deleteComponent, setDeleteComponent] =
     useState<QikfySelectedComponent | null>(null);
+  const [addSelectedComponentChildren, setAddSelectedComponentChildren] =
+    useState<{
+      componentPath: string;
+    } | null>(null);
   const [editorMode, setEditorMode] =
     useState<QikfyEditorMode>(editorModeDefault);
 
@@ -81,7 +95,9 @@ export const RenderEditorProvider: React.FC<{
       const children = [];
       let newPath = componentKeyPath;
 
-      if (component.children) {
+      const hasChildren = !!component.children;
+
+      if (hasChildren) {
         for (const key in component.children) {
           const child = component.children[key];
           newPath = newPath.concat(`.children.${key}`);
@@ -123,6 +139,9 @@ export const RenderEditorProvider: React.FC<{
             {
               key: component.id,
               className,
+              ...(reactElement.hasChildren && {
+                componentPath: componentKeyPath,
+              }),
               ...component.props,
             },
             children
@@ -142,6 +161,10 @@ export const RenderEditorProvider: React.FC<{
 
         rootElements.push(rootElement);
       }
+
+      rootElements.push(
+        <ChildrenContainer key="children-component" componentPath={""} />
+      );
 
       const mainElement = React.createElement(
         "div",
@@ -240,22 +263,42 @@ export const RenderEditorProvider: React.FC<{
     [pageModelState]
   );
 
+  const handleAddComponentChildren = useCallback(
+    async ({ componentPath, ...component }: QikfySelectedComponent) => {
+      const pageClone = _.cloneDeep(pageModelState);
+
+      const path = componentPath
+        ? `components${componentPath}.${component.id}`
+        : `components.${component.id}`;
+
+      const newPage = _.set(pageClone, path, component);
+
+      setPageModelState(newPage);
+
+      await updatePage(newPage);
+    },
+    [pageModelState]
+  );
+
   return (
     <RenderEditorContext.Provider
       value={{
         pageModel: pageModelState,
-        renderPageModel,
         selectedComponent,
+        addSelectedComponent,
+        addSelectedComponentChildren,
+        editorMode,
+        deleteComponent,
+        renderPageModel,
         onSelectComponent: handleSelectComponent,
         onAddComponent: handleAddComponent,
-        addSelectedComponent,
         onAddSelectedComponent: setAddSelectedComponent,
         onComponentEdition: handleComponentEdition,
         onDeleteSelectedComponent: setDeleteComponent,
         onConfirmDeleteComponent: handleConfirmDeleteComponent,
-        editorMode,
+        onAddSelectedComponentChildren: setAddSelectedComponentChildren,
+        onAddComponentChildren: handleAddComponentChildren,
         setEditorMode,
-        deleteComponent,
       }}
     >
       {children}

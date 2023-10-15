@@ -14,18 +14,19 @@ interface DialogProps {
 }
 
 function Dialog({ children, isOpen, title, handleClose }: DialogProps) {
-  useEffect(() => {
-    const closeOnEscapeKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        handleClose?.();
-      }
-    };
-    document.body.addEventListener("keydown", closeOnEscapeKey);
+  // useEffect(() => {
+  //   const closeOnEscapeKey = (e: KeyboardEvent) => {
+  //     console.log(e.key);
+  //     if (e.key === "Escape") {
+  //       handleClose?.();
+  //     }
+  //   };
+  //   document.body.addEventListener("keydown", closeOnEscapeKey);
 
-    return () => {
-      document.body.removeEventListener("keydown", closeOnEscapeKey);
-    };
-  }, [handleClose]);
+  //   return () => {
+  //     document.body.removeEventListener("keydown", closeOnEscapeKey);
+  //   };
+  // }, [handleClose]);
 
   if (!isOpen) return null;
 

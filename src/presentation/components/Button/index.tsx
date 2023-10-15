@@ -20,6 +20,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
 export const buttonExporter: QikfyComponentExporter = {
   element: Button,
   registerName: "button",
+  hasChildren: false,
   editor: {
     title: {
       name: "Texto do botão",

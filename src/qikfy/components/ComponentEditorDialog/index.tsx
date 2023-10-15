@@ -8,7 +8,7 @@ import styles from "./styles.module.css";
 import TextInput from "../base/TextInput";
 import Button from "../base/Button";
 import { QikfySelectedComponent } from "@/@types/builder";
-import Typography from "../base/Typography";
+import BreakpointInputs from "../base/BreakpointInputs";
 
 interface ComponentEditorDialogProps {
   handleClose: () => void;
@@ -87,6 +87,8 @@ function ComponentEditorDialog({ handleClose }: ComponentEditorDialogProps) {
     [onComponentEdition, selectedComponent]
   );
 
+  if (!selectedComponent) return null;
+
   return (
     <Dialog
       title={`Editar - ${selectedComponent?.registerName}`}
@@ -98,57 +100,7 @@ function ComponentEditorDialog({ handleClose }: ComponentEditorDialogProps) {
         onSubmit={handleSubmit(submitForm)}
       >
         {propsInputs.map((el, index) => renderInput(el, index))}
-        <Typography type="h4">Tamanho</Typography>
-        <TextInput
-          required
-          type="number"
-          label="Tamanho XS"
-          {...register("col.xs", {
-            required: { message: "Campo obrigatório", value: true },
-          })}
-          error={formState.errors["col.xs"]?.message as string}
-          max={12}
-        />
-        <TextInput
-          required
-          type="number"
-          label="Tamanho SM"
-          {...register("col.sm", {
-            required: { message: "Campo obrigatório", value: true },
-          })}
-          error={formState.errors["col.sm"]?.message as string}
-          max={12}
-        />
-        <TextInput
-          required
-          type="number"
-          label="Tamanho MD"
-          {...register("col.md", {
-            required: { message: "Campo obrigatório", value: true },
-          })}
-          error={formState.errors["col.md"]?.message as string}
-          max={12}
-        />
-        <TextInput
-          required
-          type="number"
-          label="Tamanho LG"
-          error={formState.errors["col.lg"]?.message as string}
-          {...register("col.lg", {
-            required: { message: "Campo obrigatório", value: true },
-          })}
-          max={12}
-        />
-        <TextInput
-          required
-          type="number"
-          label="Tamanho XL"
-          error={formState.errors["col.xl"]?.message as string}
-          {...register("col.xl", {
-            required: { message: "Campo obrigatório", value: true },
-          })}
-          max={12}
-        />
+        <BreakpointInputs formState={formState} register={register} />
         <div className={styles.modalButtons}>
           <Button variant="text" color="error" onClick={handleClose}>
             Fechar
